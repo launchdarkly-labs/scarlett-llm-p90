@@ -1,0 +1,519 @@
+{
+  "project": "llm-p90-experiment",
+  "tools": [
+    {
+      "key": "cat",
+      "version": 1
+    },
+    {
+      "key": "cd",
+      "version": 1
+    },
+    {
+      "key": "cp",
+      "version": 1
+    },
+    {
+      "key": "diff",
+      "version": 1
+    },
+    {
+      "key": "du",
+      "version": 1
+    },
+    {
+      "key": "echo",
+      "version": 1
+    },
+    {
+      "key": "find",
+      "version": 1
+    },
+    {
+      "key": "grep",
+      "version": 1
+    },
+    {
+      "key": "ls",
+      "version": 1
+    },
+    {
+      "key": "mkdir",
+      "version": 1
+    },
+    {
+      "key": "mv",
+      "version": 1
+    },
+    {
+      "key": "pwd",
+      "version": 1
+    },
+    {
+      "key": "rm",
+      "version": 1
+    },
+    {
+      "key": "rmdir",
+      "version": 1
+    },
+    {
+      "key": "sort",
+      "version": 1
+    },
+    {
+      "key": "tail",
+      "version": 1
+    },
+    {
+      "key": "touch",
+      "version": 1
+    },
+    {
+      "key": "wc",
+      "version": 1
+    },
+    {
+      "key": "absolute_value",
+      "version": 1
+    },
+    {
+      "key": "add",
+      "version": 1
+    },
+    {
+      "key": "divide",
+      "version": 1
+    },
+    {
+      "key": "imperial_si_conversion",
+      "version": 1
+    },
+    {
+      "key": "logarithm",
+      "version": 1
+    },
+    {
+      "key": "max_value",
+      "version": 1
+    },
+    {
+      "key": "mean",
+      "version": 1
+    },
+    {
+      "key": "min_value",
+      "version": 1
+    },
+    {
+      "key": "multiply",
+      "version": 1
+    },
+    {
+      "key": "percentage",
+      "version": 1
+    },
+    {
+      "key": "power",
+      "version": 1
+    },
+    {
+      "key": "round_number",
+      "version": 1
+    },
+    {
+      "key": "si_unit_conversion",
+      "version": 1
+    },
+    {
+      "key": "square_root",
+      "version": 1
+    },
+    {
+      "key": "standard_deviation",
+      "version": 1
+    },
+    {
+      "key": "subtract",
+      "version": 1
+    },
+    {
+      "key": "sum_values",
+      "version": 1
+    },
+    {
+      "key": "add_contact",
+      "version": 1
+    },
+    {
+      "key": "delete_message",
+      "version": 1
+    },
+    {
+      "key": "get_message_stats",
+      "version": 1
+    },
+    {
+      "key": "get_user_id",
+      "version": 1
+    },
+    {
+      "key": "list_users",
+      "version": 1
+    },
+    {
+      "key": "message_get_login_status",
+      "version": 1
+    },
+    {
+      "key": "message_login",
+      "version": 1
+    },
+    {
+      "key": "search_messages",
+      "version": 1
+    },
+    {
+      "key": "send_message",
+      "version": 1
+    },
+    {
+      "key": "view_messages_sent",
+      "version": 1
+    },
+    {
+      "key": "close_ticket",
+      "version": 1
+    },
+    {
+      "key": "create_ticket",
+      "version": 1
+    },
+    {
+      "key": "edit_ticket",
+      "version": 1
+    },
+    {
+      "key": "get_ticket",
+      "version": 1
+    },
+    {
+      "key": "get_user_tickets",
+      "version": 1
+    },
+    {
+      "key": "logout",
+      "version": 1
+    },
+    {
+      "key": "resolve_ticket",
+      "version": 1
+    },
+    {
+      "key": "ticket_get_login_status",
+      "version": 1
+    },
+    {
+      "key": "ticket_login",
+      "version": 1
+    },
+    {
+      "key": "add_to_watchlist",
+      "version": 1
+    },
+    {
+      "key": "cancel_order",
+      "version": 1
+    },
+    {
+      "key": "filter_stocks_by_price",
+      "version": 1
+    },
+    {
+      "key": "fund_account",
+      "version": 1
+    },
+    {
+      "key": "get_account_info",
+      "version": 1
+    },
+    {
+      "key": "get_available_stocks",
+      "version": 1
+    },
+    {
+      "key": "get_current_time",
+      "version": 1
+    },
+    {
+      "key": "get_order_details",
+      "version": 1
+    },
+    {
+      "key": "get_order_history",
+      "version": 1
+    },
+    {
+      "key": "get_stock_info",
+      "version": 1
+    },
+    {
+      "key": "get_symbol_by_name",
+      "version": 1
+    },
+    {
+      "key": "get_transaction_history",
+      "version": 1
+    },
+    {
+      "key": "get_watchlist",
+      "version": 1
+    },
+    {
+      "key": "notify_price_change",
+      "version": 1
+    },
+    {
+      "key": "place_order",
+      "version": 1
+    },
+    {
+      "key": "remove_stock_from_watchlist",
+      "version": 1
+    },
+    {
+      "key": "trading_get_login_status",
+      "version": 1
+    },
+    {
+      "key": "trading_login",
+      "version": 1
+    },
+    {
+      "key": "trading_logout",
+      "version": 1
+    },
+    {
+      "key": "withdraw_funds",
+      "version": 1
+    },
+    {
+      "key": "authenticate_travel",
+      "version": 1
+    },
+    {
+      "key": "cancel_booking",
+      "version": 1
+    },
+    {
+      "key": "compute_exchange_rate",
+      "version": 1
+    },
+    {
+      "key": "contact_customer_support",
+      "version": 1
+    },
+    {
+      "key": "get_all_credit_cards",
+      "version": 1
+    },
+    {
+      "key": "get_booking_history",
+      "version": 1
+    },
+    {
+      "key": "get_budget_fiscal_year",
+      "version": 1
+    },
+    {
+      "key": "get_credit_card_balance",
+      "version": 1
+    },
+    {
+      "key": "get_flight_cost",
+      "version": 1
+    },
+    {
+      "key": "get_nearest_airport_by_city",
+      "version": 1
+    },
+    {
+      "key": "list_all_airports",
+      "version": 1
+    },
+    {
+      "key": "purchase_insurance",
+      "version": 1
+    },
+    {
+      "key": "register_credit_card",
+      "version": 1
+    },
+    {
+      "key": "retrieve_invoice",
+      "version": 1
+    },
+    {
+      "key": "set_budget_limit",
+      "version": 1
+    },
+    {
+      "key": "travel_get_login_status",
+      "version": 1
+    },
+    {
+      "key": "verify_traveler_information",
+      "version": 1
+    },
+    {
+      "key": "authenticate_twitter",
+      "version": 1
+    },
+    {
+      "key": "comment",
+      "version": 1
+    },
+    {
+      "key": "follow_user",
+      "version": 1
+    },
+    {
+      "key": "get_tweet",
+      "version": 1
+    },
+    {
+      "key": "get_tweet_comments",
+      "version": 1
+    },
+    {
+      "key": "get_user_stats",
+      "version": 1
+    },
+    {
+      "key": "get_user_tweets",
+      "version": 1
+    },
+    {
+      "key": "list_all_following",
+      "version": 1
+    },
+    {
+      "key": "mention",
+      "version": 1
+    },
+    {
+      "key": "post_tweet",
+      "version": 1
+    },
+    {
+      "key": "posting_get_login_status",
+      "version": 1
+    },
+    {
+      "key": "retweet",
+      "version": 1
+    },
+    {
+      "key": "search_tweets",
+      "version": 1
+    },
+    {
+      "key": "unfollow_user",
+      "version": 1
+    },
+    {
+      "key": "activateParkingBrake",
+      "version": 1
+    },
+    {
+      "key": "adjustClimateControl",
+      "version": 1
+    },
+    {
+      "key": "check_tire_pressure",
+      "version": 1
+    },
+    {
+      "key": "display_log",
+      "version": 1
+    },
+    {
+      "key": "estimate_distance",
+      "version": 1
+    },
+    {
+      "key": "estimate_drive_feasibility_by_mileage",
+      "version": 1
+    },
+    {
+      "key": "fillFuelTank",
+      "version": 1
+    },
+    {
+      "key": "find_nearest_tire_shop",
+      "version": 1
+    },
+    {
+      "key": "gallon_to_liter",
+      "version": 1
+    },
+    {
+      "key": "get_current_speed",
+      "version": 1
+    },
+    {
+      "key": "get_outside_temperature_from_google",
+      "version": 1
+    },
+    {
+      "key": "get_outside_temperature_from_weather_com",
+      "version": 1
+    },
+    {
+      "key": "get_zipcode_based_on_city",
+      "version": 1
+    },
+    {
+      "key": "liter_to_gallon",
+      "version": 1
+    },
+    {
+      "key": "lockDoors",
+      "version": 1
+    },
+    {
+      "key": "pressBrakePedal",
+      "version": 1
+    },
+    {
+      "key": "releaseBrakePedal",
+      "version": 1
+    },
+    {
+      "key": "setCruiseControl",
+      "version": 1
+    },
+    {
+      "key": "setHeadlights",
+      "version": 1
+    },
+    {
+      "key": "set_navigation",
+      "version": 1
+    },
+    {
+      "key": "startEngine",
+      "version": 1
+    }
+  ],
+  "failed": [
+    {
+      "key": "book_flight",
+      "error": "LaunchDarkly API error on POST /projects/llm-p90-experiment/ai-tools: 400: {\"code\":\"invalid_request\",\"message\":\"Description length must not exceed 1024 characters\"}"
+    },
+    {
+      "key": "displayCarStatus",
+      "error": "LaunchDarkly API error on POST /projects/llm-p90-experiment/ai-tools: 400: {\"code\":\"invalid_request\",\"message\":\"Description length must not exceed 1024 characters\"}"
+    }
+  ]
+}

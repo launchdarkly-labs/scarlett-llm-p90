@@ -1,0 +1,76 @@
+{
+  "schema_version": 1,
+  "experiment": {
+    "project": "llm-p90-experiment",
+    "environment": "production",
+    "key": "bfcl-model-comparison",
+    "iteration_id": "69433fec-3bc1-4352-a5d2-2a4cfffec30b",
+    "started_at": "2026-11-05T23:35:28Z",
+    "completed_at": "2026-11-06T00:36:54Z",
+    "assigned_total": 170
+  },
+  "provenance": {
+    "confirmatory_log_sha256": "0fc22fa6d97cc908b7c601b556a5648e1bbe73dce83d732306fc1d034cefb920",
+    "uv_lock_sha256": "1089d842cd1356bd8159b6986a050894eb529e22b7208aa2f16680a70cb9e7d1",
+    "tools_sha256": "2e646ce4e41ac1c81694da15f6b905ec13ed86f3407c102fb028822afd34215d",
+    "launchdarkly_snapshot_sha256": "b419bff2d379da900174de860804cf6667f9f2d22d0a0c011edcf79c24e5f932",
+    "launchdarkly_ai_server": "1.0.0",
+    "launchdarkly_ai_claude_messages": "1.0.0",
+    "launchdarkly_server_sdk": "9.19.0"
+  },
+  "variations": {
+    "claude-haiku-5-5": {
+      "assigned": 85,
+      "resolved": 63,
+      "resolved_first_attempt": 53,
+      "resolved_second_attempt": 10,
+      "second_attempts": 32,
+      "resolution_rate": 0.7411764706,
+      "unresolved_rate_wilson_95": [0.1775809987, 0.3609227523],
+      "mean_duration_ms_among_resolved": 17274.9476,
+      "median_duration_ms_among_resolved": 14785.887,
+      "type7_p90_duration_ms_among_resolved": 29318.1748,
+      "launchdarkly_p90_duration_ms_among_resolved": 29459.23,
+      "resolved_within_seconds": {
+        "20": 41,
+        "30": 58,
+        "45": 62
+      }
+    },
+    "claude-sonnet-5-5": {
+      "assigned": 85,
+      "resolved": 71,
+      "resolved_first_attempt": 65,
+      "resolved_second_attempt": 6,
+      "second_attempts": 20,
+      "resolution_rate": 0.8352941176,
+      "unresolved_rate_wilson_95": [0.1007246207, 0.2576830332],
+      "mean_duration_ms_among_resolved": 18523.6469,
+      "median_duration_ms_among_resolved": 16805.528,
+      "type7_p90_duration_ms_among_resolved": 28939.53,
+      "launchdarkly_p90_duration_ms_among_resolved": 28939.53,
+      "resolved_within_seconds": {
+        "20": 46,
+        "30": 65,
+        "45": 69
+      }
+    }
+  },
+  "launchdarkly_analysis": {
+    "task_resolution": {
+      "treatment_relative_difference": -0.1127,
+      "confidence_interval_95": [-0.2521, 0.0268],
+      "p_value": 0.1132
+    },
+    "task_resolution_duration_p90": {
+      "treatment_relative_difference": 0.018,
+      "confidence_interval_95": [-0.6922, 1.3951],
+      "p_value": 1.0
+    }
+  },
+  "notes": [
+    "The 30-second metric was added after this run; its counts are descriptive and were computed from the hashed local log.",
+    "A repair receives the official BFCL error type and message. A method-order error can name missing tool methods, but does not include expected arguments or output values.",
+    "The checked-in raw log and its hash let a fresh checkout recompute the published aggregates."
+  ]
+}

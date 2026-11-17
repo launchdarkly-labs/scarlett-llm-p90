@@ -1,0 +1,87 @@
+{
+  "version": 1,
+  "status": "awaiting-sme-review",
+  "design": {
+    "pilot": "paired-offline",
+    "confirmatory": "request-randomized",
+    "allocation": "50/50",
+    "collection_horizon": "set-after-disjoint-pilot",
+    "early_stopping": false,
+    "inference": "launchdarkly-frequentist-sequential"
+  },
+  "models": {
+    "haiku": "claude-haiku-5-5",
+    "sonnet": "claude-sonnet-5-5"
+  },
+  "attempts": {
+    "maximum": 2,
+    "repair_feedback": "official-bfcl-evaluator-errors-only",
+    "repair_feedback_detail": "error type and message; method-order errors can name missing tool methods but never include expected arguments or output values",
+    "expected_answer_in_repair": false,
+    "judge_critique_in_repair": false
+  },
+  "execution": {
+    "runner_region": "local workstation (US West)",
+    "concurrency": 1,
+    "streaming": false,
+    "timeout_seconds": 600,
+    "temperature": null,
+    "max_tokens": 2048,
+    "prompt_caching": false,
+    "warmup_rows_per_model": 5,
+    "include_warmup_in_analysis": false,
+    "retry_429": true,
+    "infrastructure_error_policy": "an unrecovered provider error stops the run; resume at the first unwritten row with --start N and a new --output file, preserving the original request keys",
+    "timing_start": "immediately-before-first-provider-invocation",
+    "timing_stop": "after-official-bfcl-validation-of-final-attempt",
+    "temperature_note": "not set: Claude 4.7 and later reject a non-default temperature",
+    "tool_calling": "native, provider tools parameter",
+    "tools": {
+      "source": "Agent Management tool library, attached to both variations",
+      "count": 128,
+      "per_task_selection": "all 128 on every task"
+    },
+    "tool_loop_step_limit": 10,
+    "tool_loop_step_limit_source": "launchdarkly_ai_claude_messages handler _MAX_STEPS; BFCL's own harness allows 20",
+    "system_message": "Use the available tools to complete the user's requests.",
+    "system_message_note": "required: the AI SDK will not load a completion variation without at least one message; BFCL's native function-calling harness sends none",
+    "tool_keys": "lowercase; BFCL's ten camelCase vehicle functions use snake_case keys (lock_doors runs lockDoors)",
+    "timeout_note": "Anthropic Python SDK default; the runners do not override it",
+    "retry_note": "Anthropic Python SDK default: 2 automatic retries on connection errors, 408, 409, 429, and 5xx. Retry time counts toward task duration."
+  },
+  "metrics": {
+    "primary": "task-resolution",
+    "secondary": "task-resolution-duration-p90-among-resolved",
+    "unresolved_units_in_primary": "zero",
+    "unresolved_units_in_latency": "excluded-no-event",
+    "population_boundary_interval": "95-percent-wilson",
+    "slo": {
+      "event": "task-resolved-within-slo",
+      "threshold_ms": 30000,
+      "metric": "task-resolved-within-30s",
+      "unresolved_units": "zero",
+      "fixed_before": "bfcl-tool-search first paid call"
+    },
+    "tokens_per_task": {
+      "event": "$ld:ai:tokens:total",
+      "aggregation": "sum-per-request",
+      "metric": "tokens-per-task",
+      "source": "AI SDK automatic tracking"
+    }
+  },
+  "publication": {
+    "internal_draft": "2026-12-01",
+    "earliest_publication": "2027-01-12",
+    "named_vendor_review_required": true,
+    "publish_treatment_aliases_with_model_ids": false
+  },
+  "reproducibility": {
+    "measured_run_dependencies": "uv.lock",
+    "measured_run_rows": "logs/confirmatory.jsonl",
+    "measured_run_aggregates": "data/confirmatory_results.json",
+    "launchdarkly_resource_snapshot": "data/launchdarkly_snapshot.json",
+    "tool_definitions": "tools/bfcl_tools.json",
+    "fresh_install": "uv sync --frozen",
+    "sdk_upgrade_policy": "a run on a newer lock is a new protocol version"
+  }
+}

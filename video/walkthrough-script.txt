@@ -1,0 +1,41 @@
+This tutorial compares two models on multi-step tool-calling work. Asking which model is faster only gets you part of the way, because a fast model that fails the task hasn't saved you anything. So we will measure three things: how often each model finishes the job, how long the finished jobs take, and what they cost. We'll build that comparison, check the telemetry before spending the full budget, and then read the real result.
+
+Start with the companion repository. It contains 30 pilot tasks and 170 confirmatory tasks from BFCL, the Berkeley Function Calling Leaderboard. BFCL supplies public tasks, simulated backends, and an official checker, so a task counts as done only when the model has left the file system, ticketing system, trading account, or other backend in the expected state after every turn. A 200 from the provider doesn't count. In your own application, your definition of done takes BFCL's place.
+
+Clone the repository, run uv sync --frozen, and run the offline tests. Then copy .env.example to .env and add the operator token, the provider key, and the server-side SDK key for the test environment. Check that it's the test key and not the production one. LaunchDarkly accepts events in either environment without complaint, so you won't notice the mistake until the experiment shows no data.
+
+Next, connect the hosted LaunchDarkly MCP server. Add the public server URL to your coding agent, complete the OAuth sign-in, and confirm that the connection says ready. Then install the LaunchDarkly agent skills with the command shown here. Ask the projects skill to create llm-p90-experiment if it does not already exist. Finally, run the repository's tool-creation script, which creates all 128 BFCL tool definitions in Agent Management so you don't have to add them by hand.
+
+Use the config creation and targeting skills to create `bfcl-model-comparison` in completion mode. Add a Haiku variation and a Sonnet variation. Both use two thousand forty-eight output tokens, the same one-line system message, and the same 128 tools. Turn the config on in test, make Sonnet the default, and leave custom targeting empty. The agent should show you its plan before it applies anything.
+
+Now register the request context kind with the small helper script. The experiment randomizes by request, so LaunchDarkly needs to see that context kind before you build the metrics. Ask the MCP server to find that request in test. If it appears in production instead, stop and replace the SDK key.
+
+Create three task-level metrics with the metric and experiment skills. task-resolution is an occurrence metric whose denominator is every assigned request, so an unresolved request counts as zero. task-resolution-duration-p90 is a value metric on the duration event. It averages events per request, takes the 90th percentile, and excludes requests that never sent a duration. The third metric counts tasks resolved within 30 seconds.
+
+Read the first two together: resolution says how much work finished, and p90 says how long the finished work took. The Python AI SDK also records generation latency and tokens automatically, but those describe individual model calls. One BFCL task can take several calls plus a repair attempt, so a successful call doesn't tell you whether the task resolved.
+
+Before spending money on the experiment, run an offline evaluation. Start with one task on both models, and if that works, run all 30 pilot tasks. The offline evaluation runner sends each complete multi-turn task through the model, executes its tool calls against BFCL, and scores the final state with the official checker.
+
+Open the offline evaluation run under Agent Management and Evaluations. In the current UI, code-run evaluations have their own tab. A score of one is a pass and zero is a fail, and you should see some of each. If every score is one, the scorer may never have run. If every score is zero, suspect the plumbing before you conclude that both models forgot how to use tools. The pilot also gives you a real cost estimate for the confirmatory run.
+
+Next, create the experiment as a draft. Sonnet is the baseline, Haiku is the treatment, and assignment is 50/50 by request. Make task resolution primary because every assigned request counts. Keep p90 duration and resolution inside 30 seconds as secondary metrics. P90 is what we're investigating, but it cannot pick a winner on its own when failed tasks never enter the calculation. Use frequentist sequential testing. The collection horizon is fixed, chosen from the pilot, but sequential testing keeps the analysis valid if somebody looks at the results before the runner finishes.
+
+Do not start with all 170 tasks. Run five pilot rows through the experiment runner and write them to a smoke-test log. Because the iteration hasn't started, all five receive the default variation. That's expected, since this step only checks telemetry.
+
+Ask the MCP server to list metric events in the test environment, and confirm that task-resolved, task-resolution-duration-ms, and task-resolved-within-slo have arrived. If you skip this check, you risk spending the whole budget on data that went to the wrong place.
+
+Start the iteration only after those events appear. Then ask the agent to read the experiment back. It must report a running iteration, Sonnet as baseline, Haiku as treatment, and a 50/50 allocation. Stop if any check fails.
+
+The full command runs 170 tasks and requires --confirm-paid-run. LaunchDarkly assigns one model to each request. The runner plays the task turn by turn, executes the tools, and asks BFCL whether the task resolved. A failed task gets one repair attempt from a clean backend state. The repair receives the checker's error type and message, but not the expected arguments, output values, or answer.
+
+If the task resolves, the runner sends the resolution event and the task's complete duration. If it also finished inside 30 seconds, the runner sends the time-budget event. A task that never resolves sends no duration, which is why the percentile has to be read alongside the resolution metric.
+
+In the measured run, each model received 85 tasks. Sonnet resolved 71 (83.5 percent) and Haiku resolved 63 (74.1 percent). The observed gap favors Sonnet, but the experiment interval still includes zero and the p-value is 0.11, so 170 tasks were not enough to establish a winner on resolution. That is not a disappointing ending. It is the experiment doing its job: the data did not justify calling a winner, so we do not invent one.
+
+The p90 row shows 28.9 seconds for Sonnet and 29.5 seconds for Haiku. The two are nearly identical, and the uncertainty interval is far too wide to call either model faster. Look at the sample size, though: the percentile used 71 Sonnet durations and 63 Haiku durations, not the 85 tasks assigned to each model.
+
+The missing tasks are the failures. Neither model resolved 90 percent of its assigned work, so neither has a p90 time to successful completion within the two-attempt budget. What the chart shows is narrower: p90 duration among the tasks that succeeded.
+
+So read the results in order: resolution first, then latency among the successes, then the time-budget metric and cost. In this run, Sonnet completed more work inside 30 seconds, but those on-time completions cost substantially more. Whether the trade is worth it depends on what a failed task costs in your product.
+
+To use this pattern on your own workload, replace the BFCL rows with your requests and the official checker with your definition of done. Keep the same event shape: send resolution for every successful task, duration only when the task resolves, and a time-budget event when it resolves fast enough. The experiment works the same way whether the job is a support ticket, a code edit, or a checkout, as long as each request gets an assignment and you have a reliable test for whether it finished.

@@ -1,0 +1,9 @@
+I compared two models on p90 latency, and they looked almost identical. Sonnet came in at 28.9 seconds and Haiku at 29.5, and the uncertainty interval on that half-second gap was far too wide to call either one faster.
+
+The sample sizes tell a different story, though. Each model was given 85 tasks, but the p90 was calculated from only 71 tasks for Sonnet and 63 for Haiku. The missing tasks are the ones that failed. A failed task never sends a duration event, so it never shows up in the latency chart.
+
+The resolution rate is where those tasks show up. Sonnet completed 83.5 percent of its tasks, and Haiku completed 74.1 percent.
+
+The p90 metric isn’t wrong to leave out requests that have no duration. That’s the correct way to measure latency among successful tasks. It just can’t describe all of the work each model was assigned. In fact, neither model resolved 90 percent of its tasks within the two-attempt budget, so neither one has a p90 time to successful completion at all. What the chart shows is p90 among the successes.
+
+So I read these in order: success rate first, then latency among the successes, and then cost. If you start with latency, the model that looks fastest may just be the one that left more of its work unfinished.

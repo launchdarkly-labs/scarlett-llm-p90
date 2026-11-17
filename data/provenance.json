@@ -1,0 +1,37 @@
+{
+  "retrieved_at": "2026-11-03",
+  "leaderboard": {
+    "repository": "https://github.com/ShishirPatil/gorilla",
+    "commit": "ea03bc8dd716546f4d4c6dd462368a9ab18cc2e0",
+    "evaluation_checkpoint": "f7cf735",
+    "source_path": "data_overall.csv",
+    "source_git_blob": "3852e2addebf1287a61a332ff52613706b00e320",
+    "source_sha256": "ede5081a24bc5ac7f9b3b09a52af6bcfcd35aa0f1709239fed979db77a8159a6",
+    "file": "bfcl_v4_model_rows.csv",
+    "sha256": "64a5ac8d46169de722f5caa4dd2977f2e13f7f4a7872cf1795840d8530ff767b",
+    "selection": [
+      "Claude-Sonnet-4-5-20250929 (FC)",
+      "Gemini-2.5-Flash (FC)",
+      "Claude-Haiku-4-5-20251001 (FC)",
+      "Claude-Opus-4-5-20251101 (FC)"
+    ],
+    "note": "Latency columns are retained for source fidelity but are not used as model priors."
+  },
+  "tasks": {
+    "repository": "https://github.com/ShishirPatil/gorilla",
+    "commit": "6ea57973c7a6097fd7c5915698c54c17c5b1b6c8",
+    "source_directory": "berkeley-function-call-leaderboard/bfcl_eval/data",
+    "category": "BFCL_v4_multi_turn_base",
+    "split_method": "sha256-sort-by-source-id",
+    "pilot": {
+      "file": "bfcl_pilot.jsonl",
+      "rows": 30,
+      "sha256": "9e3772b624be2311f72cc2efc3b69b3184c2befb7710c64af4894934f82e217a"
+    },
+    "confirmatory": {
+      "file": "bfcl_confirmatory.jsonl",
+      "rows": 170,
+      "sha256": "7de01c77656e28f14336d9377320bdcdce95a914b83592867a51f1f3bd64438b"
+    }
+  }
+}

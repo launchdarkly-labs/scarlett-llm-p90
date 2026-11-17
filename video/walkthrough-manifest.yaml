@@ -1,0 +1,356 @@
+project: llm-p90-walkthrough
+output_dir: ~/Movies/tutorial-renders/llm-p90/walkthrough
+workdir: ~/Documents/Github/scarlett-llm-p90
+preset: ld-blue-green
+aspects: ["16:9"]
+terminal:
+  user: dev
+  host: tutorial
+  dir: scarlett-llm-p90
+
+shots:
+  - id: 01-question
+    type: card
+    aspect: "16:9"
+    eyebrow: "A model comparison that counts unfinished work"
+    headline: "Which model finishes the job?"
+    steps:
+      - "Resolution first"
+      - "Latency among successful tasks second"
+      - "Cost decides whether the trade is worth it"
+    hold_seconds: 35
+
+  - id: 02-repository
+    type: terminal
+    steps:
+      - display_command: "ls data"
+        output_text: |-
+          bfcl_pilot.jsonl
+          bfcl_confirmatory.jsonl
+          confirmatory_results.json
+          launchdarkly_snapshot.json
+      - display_command: "wc -l data/bfcl_pilot.jsonl data/bfcl_confirmatory.jsonl"
+        output_text: |-
+          30 data/bfcl_pilot.jsonl
+          170 data/bfcl_confirmatory.jsonl
+          200 total
+    emphasize: ["30", "170", "BFCL"]
+    hold_seconds: 45
+
+  - id: 03-setup
+    type: terminal
+    steps:
+      - display_command: "git clone https://github.com/launchdarkly-labs/scarlett-llm-p90"
+        output_text: "Cloning into 'scarlett-llm-p90'..."
+      - display_command: "cd scarlett-llm-p90 && uv sync --frozen"
+        output_text: "Resolved and installed the locked environment"
+      - display_command: "uv run pytest -q"
+        output_text: "75 passed"
+      - display_command: "cp .env.example .env"
+        output_text: "Add the test SDK key and provider credentials locally."
+    emphasize: ["75 passed", "test SDK key"]
+    hold_seconds: 45
+
+  - id: 04-mcp-and-skills
+    type: terminal
+    steps:
+      - display_command: "cursor-agent mcp login LaunchDarkly"
+        output_text: "✓ MCP login successful"
+      - display_command: "cursor-agent mcp list"
+        output_text: "LaunchDarkly: ready"
+      - display_command: "npx skills add https://github.com/launchdarkly/ai-tooling --agent cursor -y"
+        output_text: "Installed LaunchDarkly agent skills"
+      - display_command: "cursor-agent mcp list-tools LaunchDarkly"
+        output_text: "Tools for LaunchDarkly (168)"
+      - display_command: "uv run python scripts/create_bfcl_tools.py --apply"
+        output_text: "Created 128 BFCL tools in Agent Management"
+    emphasize: ["MCP login successful", "LaunchDarkly: ready", "Installed", "128 BFCL tools"]
+    hold_seconds: 45
+
+  - id: 05-config
+    type: browser
+    url: "https://app.launchdarkly.com/projects/llm-p90-experiment/ai-configs/bfcl-model-comparison/variations?env=production&selected-env=production"
+    zoom_level: 1.55
+    settle_seconds: 4
+    hold_seconds: 50
+
+  - id: 05b-variation-parity
+    type: card
+    aspect: "16:9"
+    eyebrow: "Two variations"
+    headline: "Change the model, hold everything else steady"
+    steps:
+      - "Haiku and Sonnet"
+      - "2,048 output tokens"
+      - "The same system message and 128 tools"
+    hold_seconds: 20
+
+  - id: 05c-targeting
+    type: card
+    aspect: "16:9"
+    eyebrow: "Test environment"
+    headline: "Read the targeting back before applying it"
+    steps:
+      - "Config on"
+      - "Sonnet is the default"
+      - "Custom targeting is empty"
+    hold_seconds: 20
+
+  - id: 06-request-context
+    type: terminal
+    steps:
+      - display_command: "uv run python scripts/register_context.py"
+        output_text: |-
+          Evaluated bfcl-model-comparison for:
+            kind: request
+            key: context-registration-smoke
+            environment: test
+
+          No model provider call was made.
+      - display_command: "coding-agent"
+        output_text: "Find request context context-registration-smoke in test."
+    emphasize: ["kind: request", "environment: test", "No model provider call"]
+    hold_seconds: 40
+
+  - id: 07-paired-metrics
+    type: card
+    aspect: "16:9"
+    eyebrow: "Task-level metrics"
+    headline: "Success and latency answer different questions"
+    steps:
+      - "task-resolution: every assigned request is in the denominator"
+      - "task-resolution-duration-p90: successful requests with a duration"
+      - "task-resolved-within-30s: success inside the time budget"
+    hold_seconds: 50
+
+  - id: 07b-resolution-metric
+    type: browser
+    url: "https://app.launchdarkly.com/projects/llm-p90-experiment/metrics/task-resolution/details?env=production&selected-env=production"
+    hover_text: "task-resolved"
+    zoom_level: 1.35
+    settle_seconds: 4
+    hold_seconds: 25
+
+  - id: 07c-p90-metric
+    type: browser
+    url: "https://app.launchdarkly.com/projects/llm-p90-experiment/metrics/task-resolution-duration-p90/details?env=production&selected-env=production"
+    hover_text: "task-resolution-duration-ms"
+    zoom_level: 1.35
+    settle_seconds: 4
+    hold_seconds: 25
+
+  - id: 08-p90-definition
+    type: browser
+    url: "https://app.launchdarkly.com/projects/llm-p90-experiment/metrics/task-resolution-duration-p90/details?env=production&selected-env=production"
+    hover_text: "Excluded"
+    zoom_level: 1.7
+    settle_seconds: 4
+    hold_seconds: 45
+
+  - id: 09-pilot-commands
+    type: terminal
+    steps:
+      - display_command: "uv run python run_evaluation.py --tasks 1"
+        output_text: "Run one BFCL task on both variations before the pilot."
+      - display_command: "uv run python run_evaluation.py --tasks 30"
+        output_text: |-
+          Evaluation complete
+          Rows: 30
+          Variations per row: 2
+          Results written to LaunchDarkly evaluations
+    emphasize: ["--tasks 1", "--tasks 30", "Variations per row: 2"]
+    hold_seconds: 45
+
+  - id: 10-pilot-results
+    type: browser
+    url: "https://app.launchdarkly.com/projects/llm-p90-experiment/ai/evaluations/5d237aa4-98ba-44ea-b9b1-3b7e86d8d94b/runs/704ccd0d-b125-4d90-aac2-a9a992b94cbe?env=production&selected-env=production"
+    prep_js: >-
+      const runSummary = [...document.querySelectorAll("body *")].find((el) =>
+        el.childElementCount === 0 && el.textContent?.trim() === "Run summary"
+      );
+      runSummary?.scrollIntoView({ block: "center" });
+    hover_text: "Run summary"
+    zoom_level: 1.3
+    settle_seconds: 4
+    hold_seconds: 50
+
+  - id: 11-experiment-design
+    type: browser
+    url: "https://app.launchdarkly.com/projects/llm-p90-experiment/experiments/bfcl-model-comparison/design?env=production&selected-env=production"
+    zoom_level: 1.45
+    settle_seconds: 4
+    hold_seconds: 50
+
+  - id: 11b-metric-order
+    type: card
+    aspect: "16:9"
+    eyebrow: "Metric order"
+    headline: "Resolution is primary because every request counts"
+    steps:
+      - "Primary: task resolution"
+      - "Secondary: p90 among successful tasks"
+      - "Secondary: resolved within 30 seconds"
+    hold_seconds: 22
+
+  - id: 11c-stopping-rule
+    type: card
+    aspect: "16:9"
+    eyebrow: "Analysis and collection are separate choices"
+    headline: "Collect 170 tasks, even if someone peeks"
+    steps:
+      - "The pilot fixes the collection horizon"
+      - "Sequential analysis keeps interim reads valid"
+    hold_seconds: 20
+
+  - id: 12-smoke-run
+    type: terminal
+    display_command: "uv run python run_experiment.py --dataset data/bfcl_pilot.jsonl --tasks 5 --output logs/smoke.jsonl --confirm-paid-run"
+    output_text: |-
+      task=1 resolved=True  duration_ms=12184
+      task=2 resolved=False attempts=2
+      task=3 resolved=True  duration_ms=19643
+      task=4 resolved=True  duration_ms=27952
+      task=5 resolved=False attempts=2
+
+      Wrote 5 audit rows to logs/smoke.jsonl
+    emphasize: ["resolved=True", "resolved=False", "logs/smoke.jsonl"]
+    hold_seconds: 45
+
+  - id: 13-event-check
+    type: terminal
+    display_command: "coding-agent"
+    output_text: |-
+      List metric events received in test.
+
+      ✓ task-resolved
+      ✓ task-resolution-duration-ms
+      ✓ task-resolved-within-slo
+
+      All three keys have a last-seen timestamp.
+    emphasize: ["test", "task-resolved", "task-resolution-duration-ms", "task-resolved-within-slo"]
+    hold_seconds: 45
+
+  - id: 14-preflight
+    type: browser
+    url: "https://app.launchdarkly.com/projects/llm-p90-experiment/experiments/bfcl-model-comparison/design?env=production&selected-env=production"
+    hover_text: "Running"
+    zoom_level: 1.2
+    settle_seconds: 4
+    hold_seconds: 40
+
+  - id: 15-full-run
+    type: terminal
+    display_command: "uv run python run_experiment.py --tasks 170 --confirm-paid-run"
+    output_text: |-
+      Selected 170 confirmatory tasks
+      Assignment unit: request
+      Attempt budget: 2
+      Confirmatory horizon: fixed at 170
+
+      ...
+
+      Completed 170 tasks
+      Wrote logs/confirmatory.jsonl
+    emphasize: ["170", "request", "Attempt budget: 2", "logs/confirmatory.jsonl"]
+    hold_seconds: 50
+
+  - id: 16-tracking-code
+    type: code
+    file: run_experiment.py
+    language: python
+    start_line: 175
+    end_line: 184
+    highlight_lines: [177, 180, 181, 182, 183]
+    hold_seconds: 45
+
+  - id: 17-resolution-result
+    type: browser
+    url: "https://app.launchdarkly.com/projects/llm-p90-experiment/experiments/bfcl-model-comparison/results?env=production&selected-env=production"
+    scroll_y: 520
+    hover_text: "83.53%"
+    zoom_level: 1.08
+    settle_seconds: 4
+    hold_seconds: 45
+
+  - id: 18-p90-result
+    type: browser
+    url: "https://app.launchdarkly.com/projects/llm-p90-experiment/experiments/bfcl-model-comparison/results?env=production&selected-env=production"
+    scroll_y: 980
+    hover_text: "28,939.53"
+    zoom_level: 1.08
+    settle_seconds: 4
+    hold_seconds: 45
+
+  - id: 19-missing-tasks
+    type: browser
+    url: "https://app.launchdarkly.com/projects/llm-p90-experiment/experiments/bfcl-model-comparison/results?env=production&selected-env=production"
+    scroll_y: 980
+    hover_text: "Sample size"
+    zoom_level: 1.08
+    settle_seconds: 4
+    hold_seconds: 40
+
+  - id: 20-reading-order
+    type: card
+    aspect: "16:9"
+    eyebrow: "Read the experiment in order"
+    headline: "Success → latency among successes → cost"
+    subtext: "The best trade depends on what an unfinished task costs in your product."
+    hold_seconds: 45
+
+  - id: 21-your-workload
+    type: card
+    aspect: "16:9"
+    eyebrow: "Bring your own workload"
+    headline: "Keep the event contract"
+    steps:
+      - "Assign a model"
+      - "Define finished honestly"
+      - "Send resolution, successful duration, and time-budget events"
+    hold_seconds: 45
+
+voiceovers:
+  walkthrough:
+    beats:
+      - id: 01-question
+        text: "This tutorial compares two models on multi-step tool-calling work. Asking which model is faster only gets you part of the way, because a fast model that fails the task hasn't saved you anything. So we will measure three things: how often each model finishes the job, how long the finished jobs take, and what they cost. We'll build that comparison, check the telemetry before spending the full budget, and then read the real result."
+      - id: 02-repository
+        text: "Start with the companion repository. It contains 30 pilot tasks and 170 confirmatory tasks from BFCL, the Berkeley Function Calling Leaderboard. BFCL supplies public tasks, simulated backends, and an official checker, so a task counts as done only when the model has left the file system, ticketing system, trading account, or other backend in the expected state after every turn. A 200 from the provider doesn't count. In your own application, your definition of done takes BFCL's place."
+      - id: 03-setup
+        text: "Clone the repository, run uv sync --frozen, and run the offline tests. Then copy .env.example to .env and add the operator token, the provider key, and the server-side SDK key for the test environment. Check that it's the test key and not the production one. LaunchDarkly accepts events in either environment without complaint, so you won't notice the mistake until the experiment shows no data."
+      - id: 04-mcp-and-skills
+        text: "Next, connect the hosted LaunchDarkly MCP server. Add the public server URL to your coding agent, complete the OAuth sign-in, and confirm that the connection says ready. Then install the LaunchDarkly agent skills with the command shown here. Ask the projects skill to create llm-p90-experiment if it does not already exist. Finally, run the repository's tool-creation script, which creates all 128 BFCL tool definitions in Agent Management so you don't have to add them by hand."
+      - id: 05-config
+        text: "Use the config creation and targeting skills to create `bfcl-model-comparison` in completion mode. Add a Haiku variation and a Sonnet variation. Both use two thousand forty-eight output tokens, the same one-line system message, and the same 128 tools. Turn the config on in test, make Sonnet the default, and leave custom targeting empty. The agent should show you its plan before it applies anything."
+      - id: 06-request-context
+        text: "Now register the request context kind with the small helper script. The experiment randomizes by request, so LaunchDarkly needs to see that context kind before you build the metrics. Ask the MCP server to find that request in test. If it appears in production instead, stop and replace the SDK key."
+      - id: 07-paired-metrics
+        text: "Create three task-level metrics with the metric and experiment skills. task-resolution is an occurrence metric whose denominator is every assigned request, so an unresolved request counts as zero. task-resolution-duration-p90 is a value metric on the duration event. It averages events per request, takes the 90th percentile, and excludes requests that never sent a duration. The third metric counts tasks resolved within 30 seconds."
+      - id: 08-p90-definition
+        text: "Read the first two together: resolution says how much work finished, and p90 says how long the finished work took. The Python AI SDK also records generation latency and tokens automatically, but those describe individual model calls. One BFCL task can take several calls plus a repair attempt, so a successful call doesn't tell you whether the task resolved."
+      - id: 09-pilot-commands
+        text: "Before spending money on the experiment, run an offline evaluation. Start with one task on both models, and if that works, run all 30 pilot tasks. The offline evaluation runner sends each complete multi-turn task through the model, executes its tool calls against BFCL, and scores the final state with the official checker."
+      - id: 10-pilot-results
+        text: "Open the offline evaluation run under Agent Management and Evaluations. In the current UI, code-run evaluations have their own tab. A score of one is a pass and zero is a fail, and you should see some of each. If every score is one, the scorer may never have run. If every score is zero, suspect the plumbing before you conclude that both models forgot how to use tools. The pilot also gives you a real cost estimate for the confirmatory run."
+      - id: 11-experiment-design
+        text: "Next, create the experiment as a draft. Sonnet is the baseline, Haiku is the treatment, and assignment is 50/50 by request. Make task resolution primary because every assigned request counts. Keep p90 duration and resolution inside 30 seconds as secondary metrics. P90 is what we're investigating, but it cannot pick a winner on its own when failed tasks never enter the calculation. Use frequentist sequential testing. The collection horizon is fixed, chosen from the pilot, but sequential testing keeps the analysis valid if somebody looks at the results before the runner finishes."
+      - id: 12-smoke-run
+        text: "Do not start with all 170 tasks. Run five pilot rows through the experiment runner and write them to a smoke-test log. Because the iteration hasn't started, all five receive the default variation. That's expected, since this step only checks telemetry."
+      - id: 13-event-check
+        text: "Ask the MCP server to list metric events in the test environment, and confirm that task-resolved, task-resolution-duration-ms, and task-resolved-within-slo have arrived. If you skip this check, you risk spending the whole budget on data that went to the wrong place."
+      - id: 14-preflight
+        text: "Start the iteration only after those events appear. Then ask the agent to read the experiment back. It must report a running iteration, Sonnet as baseline, Haiku as treatment, and a 50/50 allocation. Stop if any check fails."
+      - id: 15-full-run
+        text: "The full command runs 170 tasks and requires --confirm-paid-run. LaunchDarkly assigns one model to each request. The runner plays the task turn by turn, executes the tools, and asks BFCL whether the task resolved. A failed task gets one repair attempt from a clean backend state. The repair receives the checker's error type and message, but not the expected arguments, output values, or answer."
+      - id: 16-tracking-code
+        text: "If the task resolves, the runner sends the resolution event and the task's complete duration. If it also finished inside 30 seconds, the runner sends the time-budget event. A task that never resolves sends no duration, which is why the percentile has to be read alongside the resolution metric."
+      - id: 17-resolution-result
+        text: "In the measured run, each model received 85 tasks. Sonnet resolved 71 (83.5 percent) and Haiku resolved 63 (74.1 percent). The observed gap favors Sonnet, but the experiment interval still includes zero and the p-value is 0.11, so 170 tasks were not enough to establish a winner on resolution. That is not a disappointing ending. It is the experiment doing its job: the data did not justify calling a winner, so we do not invent one."
+      - id: 18-p90-result
+        text: "The p90 row shows 28.9 seconds for Sonnet and 29.5 seconds for Haiku. The two are nearly identical, and the uncertainty interval is far too wide to call either model faster. Look at the sample size, though: the percentile used 71 Sonnet durations and 63 Haiku durations, not the 85 tasks assigned to each model."
+      - id: 19-missing-tasks
+        text: "The missing tasks are the failures. Neither model resolved 90 percent of its assigned work, so neither has a p90 time to successful completion within the two-attempt budget. What the chart shows is narrower: p90 duration among the tasks that succeeded."
+      - id: 20-reading-order
+        text: "So read the results in order: resolution first, then latency among the successes, then the time-budget metric and cost. In this run, Sonnet completed more work inside 30 seconds, but those on-time completions cost substantially more. Whether the trade is worth it depends on what a failed task costs in your product."
+      - id: 21-your-workload
+        text: "To use this pattern on your own workload, replace the BFCL rows with your requests and the official checker with your definition of done. Keep the same event shape: send resolution for every successful task, duration only when the task resolves, and a time-budget event when it resolves fast enough. The experiment works the same way whether the job is a support ticket, a code edit, or a checkout, as long as each request gets an assignment and you have a reliable test for whether it finished."

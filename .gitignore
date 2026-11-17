@@ -1,0 +1,26 @@
+.env
+.env.*
+!.env.example
+.DS_Store
+__pycache__/
+*.py[cod]
+.venv/
+.pytest_cache/
+logs/*.jsonl
+!logs/confirmatory.jsonl
+
+# Video production output. Keep video/manifest.yaml and video/script.txt tracked.
+video/**/*.aac
+video/**/*.json
+video/**/*.m4a
+video/**/*.mov
+video/**/*.mp3
+video/**/*.mp4
+video/**/*.srt
+video/**/*.wav
+video/**/*.webm
+video/clips/
+video/clips-9x16/
+video/output/
+video/raw/
+video/recordings/

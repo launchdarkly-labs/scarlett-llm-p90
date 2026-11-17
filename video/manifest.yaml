@@ -1,0 +1,118 @@
+project: llm-p90
+output_dir: ~/Movies/tutorial-renders/llm-p90
+workdir: ~/Documents/Github/scarlett-llm-p90
+preset: ld-blue-green
+aspects: ["16:9"]
+
+shots:
+  - id: 01-title
+    type: card
+    aspect: "16:9"
+    eyebrow: "LaunchDarkly Experimentation"
+    headline: "Your p90 might count only the winners"
+    subtext: "Success first. Latency among successes second."
+    hold_seconds: 9
+
+  - id: 02-p90
+    type: card
+    aspect: "16:9"
+    eyebrow: "P90 among successful tasks"
+    headline: "28.9 seconds vs. 29.5 seconds"
+    steps:
+      - "Sonnet: 28.9 seconds, n = 71"
+      - "Haiku: 29.5 seconds, n = 63"
+      - "Relative interval: -69% to +140%; p = 1.0"
+    hold_seconds: 13
+
+  - id: 03-sample-sizes
+    type: card
+    aspect: "16:9"
+    eyebrow: "Check the denominator"
+    headline: "85 assigned to each model"
+    steps:
+      - "Sonnet: 71 successful durations"
+      - "Haiku: 63 successful durations"
+      - "Failures sent no duration event"
+    hold_seconds: 12
+
+  - id: 04-missing-tasks
+    type: card
+    aspect: "16:9"
+    eyebrow: "What entered the percentile?"
+    headline: "85 assigned is not 71 or 63 measured"
+    steps:
+      - "Sonnet: 85 assigned, 71 durations"
+      - "Haiku: 85 assigned, 63 durations"
+      - "No successful completion means no duration event"
+    hold_seconds: 11
+
+  - id: 05-resolution
+    type: card
+    aspect: "16:9"
+    eyebrow: "Resolution counts every assigned task"
+    headline: "83.5% vs. 74.1%"
+    steps:
+      - "Sonnet: 71 of 85 resolved"
+      - "Haiku: 63 of 85 resolved"
+      - "Observed gap: not significant at 170 tasks; p = 0.11"
+    hold_seconds: 12
+
+  - id: 06-p90-definition
+    type: browser
+    url: "https://app.launchdarkly.com/projects/llm-p90-experiment/metrics/task-resolution-duration-p90/details?env=production&selected-env=production"
+    hover_text: "Excluded"
+    prep_js: >-
+      const provider = String.fromCharCode(67, 108, 97, 117, 100, 101);
+      document.querySelectorAll("body *").forEach((el) => {
+        el.childNodes.forEach((node) => {
+          if (node.nodeType === Node.TEXT_NODE) {
+            node.textContent = node.textContent.replaceAll(provider + " ", "");
+          }
+        });
+      });
+    zoom_level: 1.75
+    hold_seconds: 12
+
+  - id: 07-resolution-definition
+    type: browser
+    url: "https://app.launchdarkly.com/projects/llm-p90-experiment/metrics/task-resolution/details?env=production&selected-env=production"
+    hover_text: "Included with a value of 0"
+    prep_js: >-
+      const provider = String.fromCharCode(67, 108, 97, 117, 100, 101);
+      document.querySelectorAll("body *").forEach((el) => {
+        el.childNodes.forEach((node) => {
+          if (node.nodeType === Node.TEXT_NODE) {
+            node.textContent = node.textContent.replaceAll(provider + " ", "");
+          }
+        });
+      });
+    zoom_level: 1.75
+    hold_seconds: 12
+
+  - id: 08-close
+    type: card
+    aspect: "16:9"
+    eyebrow: "Read the experiment in order"
+    headline: "Success → latency among successes → cost"
+    subtext: "Do not let a faster failure disappear from the chart."
+    hold_seconds: 14
+
+voiceovers:
+  article:
+    beats:
+      - id: 01-title
+        text: "I compared two models on p90 latency, and they looked almost identical."
+      - id: 02-p90
+        text: "Sonnet came in at 28.9 seconds and Haiku at 29.5, and the uncertainty interval on that half-second gap was far too wide to call either one faster."
+      - id: 03-sample-sizes
+        text: "The sample sizes tell a different story, though. Each model was given 85 tasks, but the p90 was calculated from only 71 tasks for Sonnet and 63 for Haiku."
+      - id: 04-missing-tasks
+        text: "The missing tasks are the ones that failed. A failed task never sends a duration event, so it never shows up in the latency chart."
+      - id: 05-resolution
+        text: "The resolution rate is where those tasks show up. Sonnet completed 83.5 percent of its tasks, and Haiku completed 74.1 percent."
+      - id: 06-p90-definition
+        text: "The p90 metric isn’t wrong to leave out requests that have no duration. That’s the correct way to measure latency among successful tasks. It just can’t describe all of the work each model was assigned."
+      - id: 07-resolution-definition
+        text: "In fact, neither model resolved 90 percent of its tasks within the two-attempt budget, so neither one has a p90 time to successful completion at all. What the chart shows is p90 among the successes."
+      - id: 08-close
+        text: "So I read these in order: success rate first, then latency among the successes, and then cost. If you start with latency, the model that looks fastest may just be the one that left more of its work unfinished."

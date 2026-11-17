@@ -1,0 +1,22 @@
+[project]
+name = "scarlett-llm-p90"
+version = "0.1.0"
+description = "Measure task resolution and conditional p90 latency with LaunchDarkly Agent Management."
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "bfcl-eval @ git+https://github.com/ShishirPatil/gorilla.git@6ea57973c7a6097fd7c5915698c54c17c5b1b6c8#subdirectory=berkeley-function-call-leaderboard",
+    "launchdarkly-ai-claude-messages>=1.0.0",
+    "launchdarkly-ai-server>=1.0.0",
+    "launchdarkly-server-sdk>=9.8.0",
+    "python-dotenv>=1.0.1",
+]
+
+[dependency-groups]
+dev = [
+    "pytest>=8.3.0",
+    "ruff>=0.14.0",
+]
+
+[tool.pytest.ini_options]
+pythonpath = ["."]

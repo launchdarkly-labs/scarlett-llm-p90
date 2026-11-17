@@ -1,0 +1,109 @@
+{
+  "schema_version": 1,
+  "captured_at": "2026-11-17T20:47:00Z",
+  "source": "LaunchDarkly MCP read-back from the demo account",
+  "project": "llm-p90-experiment",
+  "environment": "production",
+  "config": {
+    "key": "bfcl-model-comparison",
+    "mode": "completion",
+    "resource_version": 20,
+    "system_message": "Use the available tools to complete the user's requests.",
+    "tool_definitions_file": "tools/bfcl_tools.json",
+    "tool_definitions_sha256": "2e646ce4e41ac1c81694da15f6b905ec13ed86f3407c102fb028822afd34215d",
+    "variations": {
+      "claude-haiku-5-5": {
+        "resource_id": "b407849a-47b3-4fb4-8a92-0dea4ef3221d",
+        "version": 4,
+        "model": "claude-haiku-5-5",
+        "model_config": "Anthropic.claude-haiku-5-5",
+        "max_tokens": 2048,
+        "temperature": null,
+        "attached_tools": 128,
+        "attached_tool_versions": [1]
+      },
+      "claude-sonnet-5-5": {
+        "resource_id": "c0543f59-08a1-4d94-b080-c113da2c6af4",
+        "version": 5,
+        "model": "claude-sonnet-5-5",
+        "model_config": "Anthropic.claude-sonnet-5-5",
+        "max_tokens": 2048,
+        "temperature": null,
+        "attached_tools": 128,
+        "attached_tool_versions": [1]
+      }
+    },
+    "targeting": {
+      "enabled": true,
+      "version": 6,
+      "rules": [],
+      "context_kind": "request",
+      "seed": 949531050,
+      "can_reshuffle": false,
+      "default_variation": "claude-sonnet-5-5",
+      "allocation": {
+        "claude-sonnet-5-5": 50,
+        "claude-haiku-5-5": 50
+      }
+    }
+  },
+  "experiment": {
+    "key": "bfcl-model-comparison",
+    "iteration_id": "69433fec-3bc1-4352-a5d2-2a4cfffec30b",
+    "start_date": "2026-11-05T23:35:14Z",
+    "baseline": "claude-sonnet-5-5",
+    "treatment": "claude-haiku-5-5",
+    "allocation": "50/50",
+    "randomization_unit": "request",
+    "statistical_approach": "frequentist",
+    "sequential_testing": true,
+    "significance_level": 0.05,
+    "metrics": [
+      "task-resolution",
+      "task-resolution-duration-p90",
+      "tokens-per-task"
+    ]
+  },
+  "metrics": {
+    "task-resolution": {
+      "version_id": "5cdea4f5-94bc-46db-bdc6-13d31036b198",
+      "event_key": "task-resolved",
+      "measure_type": "occurrence",
+      "analysis_type": "mean",
+      "analysis_unit": "request",
+      "unit_aggregation": "average",
+      "units_without_events": 0,
+      "success_criteria": "HigherThanBaseline"
+    },
+    "task-resolution-duration-p90": {
+      "version_id": "f70e55cc-21ca-4c76-9ce2-0435d0a9110f",
+      "event_key": "task-resolution-duration-ms",
+      "measure_type": "value",
+      "analysis_type": "percentile",
+      "percentile_value": 90,
+      "analysis_unit": "request",
+      "unit_aggregation": "average",
+      "unit": "ms",
+      "units_without_events": "excluded",
+      "success_criteria": "LowerThanBaseline"
+    },
+    "tokens-per-task": {
+      "version_id": "1cbb215d-1bdd-4042-b2a9-8d11ef8c5c98",
+      "event_key": "$ld:ai:tokens:total",
+      "measure_type": "value",
+      "analysis_type": "mean",
+      "analysis_unit": "request",
+      "unit_aggregation": "sum",
+      "unit": "tokens",
+      "units_without_events": "excluded",
+      "success_criteria": "LowerThanBaseline"
+    }
+  },
+  "post_run_metric": {
+    "task-resolved-within-30s": {
+      "created_at": "2026-11-06T09:48:12Z",
+      "version_id": "acade7f0-932d-4dac-bd3c-7b2c5fb55746",
+      "note": "Added after the measured run. Counts in confirmatory_results.json are descriptive."
+    }
+  }
+}
